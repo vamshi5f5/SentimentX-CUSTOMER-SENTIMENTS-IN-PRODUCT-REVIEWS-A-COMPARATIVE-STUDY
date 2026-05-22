@@ -1,0 +1,221 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Page</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-image: url("{% static 'images/back4.jpeg' %}");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+header {
+    width: 100%;
+    height: 4rem;
+     background-color: rgb(75, 152, 177);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    padding: 0 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#heading h1 {
+    margin: 0;
+}
+
+#component {
+    display: flex;
+    gap: 2rem;
+}
+
+#component a {
+    font-weight: bold;
+    text-decoration: none;
+    color: black;
+    cursor: pointer;
+}
+
+main {
+    padding: 1rem 1rem 4rem;
+    min-height: 100vh;
+}
+
+img {
+    display: block;
+    width: 85%;
+    height: 300px;
+    margin: auto;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 1rem;
+    color:aliceblue;
+}
+
+#user-details {
+    width: 100%;
+    max-width: 1100px;
+    margin: auto;
+    display: none;
+    text-align: center;
+}
+
+#user-details h3,
+#user-details h4 {
+    padding-top: 2rem;
+}
+
+table {
+    width: 70%;
+    margin: 0px auto;
+    background-color: aliceblue;
+    border-collapse: collapse;
+    margin-bottom: 4rem;
+}
+
+th,
+td {
+    padding: 0.8rem;
+    border: 1px solid #444;
+    text-align: center;
+}
+@media (max-width: 768px) {
+    table {
+        font-size: 0.9rem;
+    }
+    th, td {
+        padding: 0.5rem;
+    }
+}
+
+button {
+    padding: 0.4rem 1rem;
+    cursor: pointer;
+    border: none;
+    background-color: #4CAF50;
+    color: white;
+    font-weight: bold;
+    border-radius: 4px;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+footer {
+    background-color: rgb(75, 152, 177);
+    width: 100%;
+    padding: 0.5rem;
+    position: fixed;
+    bottom: 0;
+    text-align: center;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div id="heading">
+       <h1>Product Sentiment</h1>
+    </div>
+    <div id="component">
+        <a id="details-btn">User Details</a>
+        <a href="{% url 'login' %}">Logout</a>
+    </div>
+</header>
+
+<main>
+    <h2 style="padding-top: 2rem;">Welcome to Admin Page</h2>
+
+    <img src="{% static 'images/p2.jpg' %}" />
+
+    <div id="user-details" style="display:none;">
+
+        <h3>
+            <span style="background-color:rgb(55, 125, 238);color:white;padding:0.3rem 0.7rem;">
+                Welcome, {{ user.username }} (Admin)
+            </span>
+        </h3>
+
+        {% if error %}
+            <p style="color:red;">{{ error }}</p>
+        {% endif %}
+
+        <h4 style="margin-top:1rem; color:aliceblue;">All Users</h4>
+
+        <table>
+            <tr>
+                <th>Id</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+
+            {% for u in users_list %}
+            <tr>
+                <td>{{ u.id }}</td>
+                <td>{{ u.username }}</td>
+                <td>{{ u.email }}</td>
+                <td>{{ u.role }}</td>
+                <td>
+                    {% if u.approved %}
+                        ✅ Approved
+                    {% else %}
+                        ❌ Not Approved
+                    {% endif %}
+                </td>
+                <td>
+                    {% if not u.approved %}
+                        <form method="POST" action="{% url 'approve_user' u.username %}">
+                            {% csrf_token %}
+                            <button type="submit">Approve</button>
+                        </form>
+                    {% else %}
+                        <span style="color: green;">Approved</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+
+    </div>
+</main>
+
+<footer>
+    <h4>&copy; 2025 All Rights Reserved SAK Informatics</h4>
+</footer>
+
+<script>
+const detailsBtn = document.getElementById("details-btn");
+const userDetails = document.getElementById("user-details");
+
+detailsBtn.addEventListener("click", function() {
+    if (userDetails.style.display === "none") {
+        userDetails.style.display = "block";
+        detailsBtn.textContent = "Hide Details";
+    } else {
+        userDetails.style.display = "none";
+        detailsBtn.textContent = "User Details";
+    }
+});
+</script>
+
+</body>
+</html>

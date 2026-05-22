@@ -1,0 +1,225 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Prediction Page</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            overflow-x: hidden;
+            background-image: url("{% static 'images/back4.jpeg' %}");
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        /* ================= HEADER (MATCHES LOGIN PAGE) ================= */
+        header {
+            width: 100%;
+            height: 4rem;
+            background-color: rgb(75, 152, 177);
+            position: fixed;
+            top: 0;
+            z-index: 10;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 3rem;
+        }
+
+        #heading h1 {
+            margin: 0;
+            white-space: nowrap;
+        }
+
+        #component {
+            display: flex;
+            gap: 2rem;
+            white-space: nowrap;
+        }
+
+        #component a {
+            font-weight: bold;
+            text-decoration: none;
+            color: black;
+        }
+
+        /* ================= MAIN ================= */
+        main {
+            min-height: 100vh;
+            padding-top: 4rem;
+            padding-bottom: 4rem;
+        }
+
+        h2 {
+            padding-top: 2rem;
+            text-align: center;
+            color: aliceblue;
+        }
+
+        img {
+            display: block;
+            width: 85%;
+            height: 300px;
+            margin: 2rem auto;
+        }
+
+        form {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        #file {
+            width: 40%;
+            min-width: 15rem;
+            max-width: 20rem;
+            cursor: pointer;
+            color: white;
+            background-color: rgb(75, 152, 177);
+            padding: 0.6rem;
+            border-radius: 5px;
+            border: none;
+        }
+
+        button {
+            padding: 0.6rem 3rem;
+            cursor: pointer;
+            font-weight: bold;
+            border: none;
+            border-radius: 20px;
+        }
+
+        span {
+            background-color: rgb(161, 19, 218);
+            padding: 0.2rem 0.6rem;
+            color: aliceblue;
+        }
+
+        .table-wrapper {
+            width: 85%;
+            margin: 2rem auto;
+            max-height: 60vh;
+            overflow-y: auto;
+            background: white;
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+            word-break: break-word;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            position: sticky;
+            top: 0;
+        }
+
+        footer {
+            background-color: rgb(75, 152, 177);
+            padding: 0.5rem;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+        }
+
+        /* ================= RESPONSIVE ================= */
+        @media(max-width: 900px) {
+
+            header {
+                flex-direction: column;
+                height: auto;
+                padding: 1rem 0;
+            }
+
+            #component {
+                margin-top: 0.5rem;
+            }
+
+            img {
+                width: 95%;
+                height: auto;
+            }
+
+            #file {
+                width: 15rem;
+            }
+
+            .table-wrapper {
+                width: 95%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div id="heading">
+            <h1>Product Sentiment</h1>
+        </div>
+
+        <div id="component">
+            <a href="/">Home</a>
+            <a href="{% url 'login' %}">Logout</a>
+        </div>
+    </header>
+
+    <main>
+
+        <h2>Welcome to Text Prediction Page</h2>
+
+        <img src="{% static 'images/p2.jpg' %}" alt="banner" />
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" name="file" id="file" accept=".csv" required /><br><br>
+            <button type="submit">Submit</button>
+        </form>
+
+        {% if messages %}
+        <div style="text-align:center; margin-top:1rem;">
+            {% for message in messages %}
+            <p><strong><span>{{ message }}</span></strong></p>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if prediction_table %}
+        <h3 style="text-align:center; margin-top:2rem; color:aliceblue;">File Prediction</h3>
+
+        <div class="table-wrapper">
+            {{ prediction_table|safe }}
+        </div>
+        {% endif %}
+
+    </main>
+
+    <footer>
+        <h4>&copy; 2025 All Rights Reserved SAK Informatics</h4>
+    </footer>
+
+</body>
+
+</html>

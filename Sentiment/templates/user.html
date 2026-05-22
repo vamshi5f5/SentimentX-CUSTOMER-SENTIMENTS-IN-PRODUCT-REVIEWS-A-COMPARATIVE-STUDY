@@ -1,0 +1,195 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User page</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    font-family: Arial, sans-serif;
+    background-image: url("{% static 'images/back4.jpeg' %}");
+    background-size: cover;
+    background-position: center;
+}
+header{
+    width:100%;
+    height:4rem;
+    background-color: rgb(75, 152, 177);
+    color:black;
+    position:sticky;
+    top:0;
+    z-index:1;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 3rem;
+}
+#heading h1 {
+    margin:0;
+}
+#component{
+    display:flex;
+    gap:2rem;
+}
+#component a{
+    text-decoration: none;
+    color: black;
+    cursor: pointer;
+    font-weight: bold;
+}
+main {
+    min-height: 100vh;
+    padding-bottom: 4rem;
+    padding-top: 2rem;
+}
+
+img {
+    display: block;
+    width: 85%;
+    height: 300px;
+    margin: auto;
+}
+#user-details{
+    text-align: center;
+    padding-top: 3rem;
+    margin: 0 auto;
+}
+
+table{
+    margin:1rem auto;
+    background-color: aliceblue;
+    width: 40%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding:1rem;
+    border:1px solid #000;
+}
+@media (max-width: 900px) {
+
+    header {
+        flex-direction: column;
+        height: auto;
+        padding: 1rem 0;
+        text-align: center;
+    }
+
+    #component {
+        margin-top: .5rem;
+    }
+
+    img {
+        width: 95%;
+        height: auto;
+    }
+
+    table {
+        width: 75%;
+    }
+}
+footer {
+   background-color: rgb(75, 152, 177);
+    color: black;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    padding: 6px 0;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div id="heading">
+        <h1>Product Sentiment</h1>
+    </div>
+
+    <div id="component">
+        <a id="details-btn">User Info</a>
+        <a href="{% url 'prediction' %}">Prediction</a>
+        <a href="{% url 'login' %}">Logout</a>
+    </div>
+</header>
+
+
+<main>
+
+    <h2 style="text-align: center;padding-bottom: 2rem; color:aliceblue;">Welcome to User Page</h2>
+
+    <img src="{% static 'images/p2.jpg' %}" />
+
+    <div id="user-details" style="display:none;">
+
+        {% if user %}
+            <h3 style="padding-top: 1rem;">
+                <span style="background-color: rgb(2,67,17); color:white; padding:0.3rem 0.7rem;">
+                    User Details:
+                </span>
+            </h3>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Password</th>
+                        <th>Role</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.password }}</td>
+                        <td>{{ user.role }}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+        {% elif error %}
+            <p style="color:red;">{{ error }}</p>
+        {% else %}
+            <p>No user found.</p>
+        {% endif %}
+
+    </div>
+
+</main>
+
+<footer>
+    <h4>&copy; 2025 All Rights Reserved SAK Informatics</h4>
+</footer>
+
+
+<script>
+const detailsBtn = document.getElementById("details-btn");
+const userDetails = document.getElementById("user-details");
+
+detailsBtn.addEventListener("click", function() {
+    if (userDetails.style.display === "none") {
+        userDetails.style.display = "block";
+        detailsBtn.textContent = "Hide Info";
+    } else {
+        userDetails.style.display = "none";
+        detailsBtn.textContent = "User Info";
+    }
+});
+</script>
+
+</body>
+</html>
